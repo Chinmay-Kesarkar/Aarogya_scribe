@@ -15,7 +15,9 @@
 
 <div class="dashboard">
 
-    <!-- LEFT SIDEBAR -->
+    <!-- =========================
+         LEFT SIDEBAR
+    ========================== -->
     <aside class="sidebar">
 
         <div class="logo">
@@ -42,93 +44,166 @@
                 </strong>
 
                 {% if patient.phone %}
-                    <p>{{ patient.phone }}</p>
+
+                    <p>
+                        {{ patient.phone }}
+                    </p>
+
                 {% elif patient.mobile %}
-                    <p>{{ patient.mobile }}</p>
+
+                    <p>
+                        {{ patient.mobile }}
+                    </p>
+
                 {% else %}
-                    <p>Patient ID: {{ patient.id }}</p>
+
+                    <p>
+                        Patient ID: {{ patient.id }}
+                    </p>
+
                 {% endif %}
 
             {% else %}
 
-                <strong>No patient selected</strong>
+                <strong>
+                    No patient selected
+                </strong>
 
             {% endif %}
 
         </div>
 
 
-        <!-- VISIT HISTORY -->
+        <!-- =========================
+             VISIT HISTORY
+        ========================== -->
+
         <h3 class="visit-title">
             Visit History
         </h3>
 
+        <div id="visitHistory">
 
-        {% if consultations %}
+            {% if consultations %}
 
-            {% for consultation in consultations %}
+                {% for consultation in consultations %}
+
+                    <div
+                        class="clinical-card visit-card"
+                        data-consultation-id="{{ consultation.id }}"
+                        {% if forloop.counter > 3 %}
+                            style="display: none;"
+                        {% endif %}
+                    >
+
+                        <strong>
+                            {{ consultation.created_at|date:"d M Y" }}
+                        </strong>
+
+                        <br>
+
+                        {% if consultation.chief_complaints %}
+
+                            {{ consultation.chief_complaints|join:", " }}
+
+                        {% elif consultation.diagnosis %}
+
+                            {{ consultation.diagnosis|join:", " }}
+
+                        {% else %}
+
+                            Consultation
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+
+                <!-- SEE MORE BUTTON -->
+
+                {% if consultations|length > 3 %}
+
+                    <button
+                        type="button"
+                        id="seeMoreButton"
+                        class="see-more-button"
+                    >
+                        See More
+                    </button>
+
+                {% endif %}
+
+
+            {% else %}
 
                 <div class="clinical-card">
-
-                    <strong>
-                        {{ consultation.created_at|date:"d M Y" }}
-                    </strong>
-
-                    <br>
-
-                    {% if consultation.chief_complaints %}
-
-                        {{ consultation.chief_complaints|join:", " }}
-
-                    {% elif consultation.diagnosis %}
-
-                        {{ consultation.diagnosis|join:", " }}
-
-                    {% else %}
-
-                        Consultation
-
-                    {% endif %}
-
+                    No previous consultations.
                 </div>
 
-            {% endfor %}
+            {% endif %}
 
-        {% else %}
-
-            <div class="clinical-card">
-                No previous consultations.
-            </div>
-
-        {% endif %}
+        </div>
 
     </aside>
 
 
-    <!-- CENTER -->
+    <!-- =========================
+         CENTER
+    ========================== -->
+
     <main class="main">
 
         <div class="center-content">
 
-            <button class="mic" id="micButton">
+            <!-- MICROPHONE -->
+
+            <button
+                class="mic"
+                id="micButton"
+                type="button"
+            >
                 🎙️
             </button>
 
-            <div class="start-text" id="statusText">
+
+            <!-- STATUS -->
+
+            <div
+                class="start-text"
+                id="statusText"
+            >
                 Start Consultation
             </div>
 
-            <div class="transcript-box" id="transcriptBox">
+
+            <!-- TRANSCRIPT -->
+
+            <div
+                class="transcript-box"
+                id="transcriptBox"
+            >
                 Your transcript will appear here...
             </div>
 
-            <div class="hint" id="hintText">
+
+            <!-- HINT -->
+
+            <div
+                class="hint"
+                id="hintText"
+            >
                 The assistant will transcribe the consultation.
             </div>
 
 
             <!-- LIVE WAVEFORM -->
-            <div class="waveform" id="waveform">
+
+            <div
+                class="waveform"
+                id="waveform"
+            >
 
                 <span></span>
                 <span></span>
@@ -153,18 +228,29 @@
     </main>
 
 
-    <!-- RIGHT SIDEBAR -->
+    <!-- =========================
+         RIGHT SIDEBAR
+    ========================== -->
+
     <aside class="clinical">
 
-        <h2>Clinical Record</h2>
+        <h2>
+            Clinical Record
+        </h2>
 
 
         <!-- CHIEF COMPLAINTS -->
+
         <div class="clinical-section">
 
-            <h3>Chief Complaints</h3>
+            <h3>
+                Chief Complaints
+            </h3>
 
-            <div class="clinical-card">
+            <div
+                class="clinical-card"
+                id="chiefComplaints"
+            >
                 Waiting for consultation...
             </div>
 
@@ -172,11 +258,17 @@
 
 
         <!-- VITALS -->
+
         <div class="clinical-section">
 
-            <h3>Vitals</h3>
+            <h3>
+                Vitals
+            </h3>
 
-            <div class="clinical-card">
+            <div
+                class="clinical-card"
+                id="vitalsCard"
+            >
                 BP &nbsp; — &nbsp; SpO₂ &nbsp; —
             </div>
 
@@ -184,11 +276,17 @@
 
 
         <!-- DIAGNOSIS -->
+
         <div class="clinical-section">
 
-            <h3>Diagnosis</h3>
+            <h3>
+                Diagnosis
+            </h3>
 
-            <div class="clinical-card">
+            <div
+                class="clinical-card"
+                id="diagnosisCard"
+            >
                 Waiting for AI...
             </div>
 
@@ -196,11 +294,17 @@
 
 
         <!-- PRESCRIPTIONS -->
+
         <div class="clinical-section">
 
-            <h3>Prescriptions</h3>
+            <h3>
+                Prescriptions
+            </h3>
 
-            <div class="clinical-card">
+            <div
+                class="clinical-card"
+                id="prescriptionCard"
+            >
                 No prescription yet.
             </div>
 
@@ -210,6 +314,8 @@
 
 </div>
 
+
+<!-- DASHBOARD JAVASCRIPT -->
 
 <script src="{% static 'js/dashboard.js' %}"></script>
 

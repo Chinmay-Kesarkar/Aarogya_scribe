@@ -1,0 +1,7 @@
+@font-face {
+    font-family: "Lovelo Black";
+    src: url("/static/fonts/LoveloBlack.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}

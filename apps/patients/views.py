@@ -7,16 +7,50 @@ from apps.consultations.models import Consultation
 def dashboard(request):
 
     # =========================
-    # GET DEMO PATIENT
+    # GET SELECTED PATIENT
     # =========================
 
-    patient = Patient.objects.filter(
-        full_name__iexact="Ramesh Kunwar"
-    ).first()
+    patient_id = request.GET.get("patient_id")
 
-    # If Ramesh does not exist, use first patient
+    patient = None
+
+    if patient_id:
+
+        try:
+            patient = Patient.objects.get(
+                id=patient_id
+            )
+
+        except Patient.DoesNotExist:
+            patient = None
+
+
+    # =========================
+    # DEFAULT PATIENT
+    # =========================
+
     if patient is None:
+
+        patient = Patient.objects.filter(
+            full_name__iexact="Ramesh Kunwar"
+        ).first()
+
+
+    # If Ramesh does not exist,
+    # use the first patient
+
+    if patient is None:
+
         patient = Patient.objects.first()
+
+
+    # =========================
+    # GET ALL PATIENTS
+    # =========================
+
+    patients = Patient.objects.all().order_by(
+        "full_name"
+    )
 
 
     # =========================
@@ -39,6 +73,7 @@ def dashboard(request):
     latest_consultation = None
 
     if consultations:
+
         latest_consultation = consultations[0]
 
 
@@ -49,6 +84,8 @@ def dashboard(request):
     context = {
 
         "patient": patient,
+
+        "patients": patients,
 
         "consultations": consultations,
 
