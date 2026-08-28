@@ -1,0 +1,217 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Aarogya Scribe</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🩺 Aarogya Scribe
+        </div>
+
+        <div class="subtitle">
+            Ambient AI Assistant
+        </div>
+
+        <input
+            class="search"
+            type="text"
+            placeholder="Mobile or ABHA ID"
+        >
+
+        <!-- PATIENT -->
+        <div class="patient">
+
+            {% if patient %}
+
+                <strong>
+                    {{ patient.full_name }}
+                </strong>
+
+                {% if patient.phone %}
+                    <p>{{ patient.phone }}</p>
+                {% elif patient.mobile %}
+                    <p>{{ patient.mobile }}</p>
+                {% else %}
+                    <p>Patient ID: {{ patient.id }}</p>
+                {% endif %}
+
+            {% else %}
+
+                <strong>No patient selected</strong>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- VISIT HISTORY -->
+        <h3 class="visit-title">
+            Visit History
+        </h3>
+
+
+        {% if consultations %}
+
+            {% for consultation in consultations %}
+
+                <div class="clinical-card">
+
+                    <strong>
+                        {{ consultation.created_at|date:"d M Y" }}
+                    </strong>
+
+                    <br>
+
+                    {% if consultation.chief_complaints %}
+
+                        {{ consultation.chief_complaints|join:", " }}
+
+                    {% elif consultation.diagnosis %}
+
+                        {{ consultation.diagnosis|join:", " }}
+
+                    {% else %}
+
+                        Consultation
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="clinical-card">
+                No previous consultations.
+            </div>
+
+        {% endif %}
+
+    </aside>
+
+
+    <!-- CENTER -->
+    <main class="main">
+
+        <div class="center-content">
+
+            <button class="mic" id="micButton">
+                🎙️
+            </button>
+
+            <div class="start-text" id="statusText">
+                Start Consultation
+            </div>
+
+            <div class="transcript-box" id="transcriptBox">
+                Your transcript will appear here...
+            </div>
+
+            <div class="hint" id="hintText">
+                The assistant will transcribe the consultation.
+            </div>
+
+
+            <!-- LIVE WAVEFORM -->
+            <div class="waveform" id="waveform">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="clinical">
+
+        <h2>Clinical Record</h2>
+
+
+        <!-- CHIEF COMPLAINTS -->
+        <div class="clinical-section">
+
+            <h3>Chief Complaints</h3>
+
+            <div class="clinical-card">
+                Waiting for consultation...
+            </div>
+
+        </div>
+
+
+        <!-- VITALS -->
+        <div class="clinical-section">
+
+            <h3>Vitals</h3>
+
+            <div class="clinical-card">
+                BP &nbsp; — &nbsp; SpO₂ &nbsp; —
+            </div>
+
+        </div>
+
+
+        <!-- DIAGNOSIS -->
+        <div class="clinical-section">
+
+            <h3>Diagnosis</h3>
+
+            <div class="clinical-card">
+                Waiting for AI...
+            </div>
+
+        </div>
+
+
+        <!-- PRESCRIPTIONS -->
+        <div class="clinical-section">
+
+            <h3>Prescriptions</h3>
+
+            <div class="clinical-card">
+                No prescription yet.
+            </div>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+</body>
+</html>
